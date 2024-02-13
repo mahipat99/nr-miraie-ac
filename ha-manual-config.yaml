@@ -1,0 +1,51 @@
+mqtt:
+  climate:
+    - name: Bedroom AC
+      unique_id: bedroom_ac1
+      mode_command_topic: "miraie-ac/bedroom-ac/mode/set"
+      mode_command_template: >-
+       {% set values = { '0':'auto', '1':'heat',  '2':'cool', '4':'off'} %}
+       {{ values[value] if value in values.keys() else 'off' }}
+      mode_state_topic: "mirai/bedroom/state"
+      mode_state_template: "{% set mode = value_json.acmd %}{% set power = value_json.ps %}{%- if power == 'off' -%} off {%- else -%} {{ 'fan_only' if mode == 'fan' else mode }} {%- endif -%}"
+      #availability_topic: "miraie-ac/bedroom-ac/availability"
+      availability_topic: "mirai/bedroom/state"
+      availability_template: "{{ value_json.onlineStatus }}"
+      payload_available: "true"
+      payload_not_available: "false"
+      temperature_command_topic: "miraie-ac/bedroom-ac/temp/set"
+      temperature_state_topic: "mirai/bedroom/state"
+      temperature_state_template: "{{ value_json.actmp }}"
+      current_temperature_topic : "mirai/bedroom/state"
+      current_temperature_template : "{{ value_json.rmtmp }}"
+      temperature_unit: C
+      max_temp: "30"
+      min_temp: "16"
+      precision: 1.0
+      action_topic: "miraie-ac/bedroom-ac/action"
+      # power_command_topic: "miraie-ac/bedroom-ac/power/set"
+      fan_mode_command_topic: "miraie-ac/bedroom-ac/fan/set"
+      fan_mode_state_topic: "mirai/bedroom/state"
+      fan_mode_state_template: "{{ value_json.acfs }}"
+      swing_mode_command_topic: "miraie-ac/bedroom-ac/swing/set"
+      swing_mode_state_topic: "mirai/bedroom/state"
+      swing_mode_state_template: "{{ value_json.acvs }}"
+      swing_modes:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+      modes:
+        - "auto"
+        - "cool"
+        - "dry"
+        - "fan_only"
+        - "off"
+      fan_modes:
+        - "auto"
+        - "quiet"
+        - "low"
+        - "medium"
+        - "high"

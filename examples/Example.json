@@ -1,30 +1,414 @@
 [
-    {
-        "id": "cc520a6552111f8e",
-        "type": "tab",
-        "label": "Flow 1",
-        "disabled": false,
-        "info": "",
-        "env": []
+  {
+    "id": "73ab60dae517aff2",
+    "type": "group",
+    "z": "1030858c3d274909",
+    "name": "Mirae-AC",
+    "style": {
+      "label": true,
+      "color": "#000000"
     },
-    {
-        "id": "61390bede4c88c55",
-        "type": "ha-miraie-ac",
-        "z": "cc520a6552111f8e",
-        "name": "MirAIe",
-        "haBrokerHost": "192.168.1.1",
-        "haBrokerPort": "1883",
-        "useCleanSession": "true",
-        "useSsl": "false",
-        "logLevel": "INFO",
-        "credentials": {
-            "mobile": "+911234567890",
-            "password": "SomePassword",
-            "haBrokerUsername": "ha",
-            "haBrokerPassword": "password"
-        },
-        "x": 120,
-        "y": 120,
-        "wires": []
-    }
+    "nodes": [
+      "125d1480338f96d1",
+      "28f5fb9d99b63805",
+      "ee5cd1ebb0b558f0",
+      "5a1e91d1dbfee8bf",
+      "06902108b8e541e1",
+      "a68eaab2c50c2e6a",
+      "da6ba75146769cb2",
+      "ca4cc6f6cdb0f7fd",
+      "46dfcdbd19ffc507",
+      "30bb6893135a1044",
+      "4fbc158c9f230794",
+      "06e79126e94fd87e",
+      "557aca6da9e07fa5",
+      "71fc28a12b37336a",
+      "3528548ac824fe10"
+    ],
+    "x": 14,
+    "y": 19,
+    "w": 892,
+    "h": 402
+  },
+  {
+    "id": "125d1480338f96d1",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "Req stat",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "7200",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "5",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 240,
+    "y": 60,
+    "wires": [
+      [
+        "3528548ac824fe10"
+      ]
+    ]
+  },
+  {
+    "id": "28f5fb9d99b63805",
+    "type": "mqtt out",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "Bedroom AC",
+    "topic": "mirai/bedroom/state",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "98deded7a87ca014",
+    "x": 450,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "ee5cd1ebb0b558f0",
+    "type": "function",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "name",
+    "func": "var out1 = null;\nvar out2 = null;\nvar payload = {\"payload\": msg};\n\nif (msg && msg.friendlyName == \"Bedroom AC\") {\n    out1 = payload;\n} else if (msg && msg.friendlyName == \"Bedroom2 AC\") {\n    out2 = payload;\n} else {\n    node.warn(\"No match found\");\n}\n\nreturn [[out1], [out2]];\n",
+    "outputs": 2,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 160,
+    "wires": [
+      [
+        "28f5fb9d99b63805",
+        "5a1e91d1dbfee8bf"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "5a1e91d1dbfee8bf",
+    "type": "function",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "Data",
+    "func": "if (msg.payload.hasOwnProperty('filterCleaningRequired')) {\n    var dust = {\"payload\": msg.payload.filterDustLevel};\n    var clean = {\"payload\": msg.payload.filterCleaningRequired};\n    var totalop = {\"payload\": msg.payload.totalOperatingHours};\n    var actmp = {\"payload\": msg.payload.actmp};\n    var rssi = {\"payload\": msg.payload.rssi};\n    var lcmd = {\"payload\": msg.payload.lcmd};\n\n    return [[dust], [clean], [totalop], [actmp], [rssi], [lcmd]];\n} else {\n    return null;\n}\n",
+    "outputs": 6,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 160,
+    "wires": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "06902108b8e541e1",
+    "type": "mqtt out",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "Jet",
+    "topic": "miraie-ac/bedroom-ac/jet/set",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "98deded7a87ca014",
+    "x": 550,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "a68eaab2c50c2e6a",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "on",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "on",
+    "payloadType": "str",
+    "x": 430,
+    "y": 340,
+    "wires": [
+      [
+        "06902108b8e541e1"
+      ]
+    ]
+  },
+  {
+    "id": "da6ba75146769cb2",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "off",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "off",
+    "payloadType": "str",
+    "x": 430,
+    "y": 380,
+    "wires": [
+      [
+        "06902108b8e541e1"
+      ]
+    ]
+  },
+  {
+    "id": "ca4cc6f6cdb0f7fd",
+    "type": "mqtt out",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "Nanog",
+    "topic": "miraie-ac/bedroom-ac/nanog/set",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "98deded7a87ca014",
+    "x": 830,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "46dfcdbd19ffc507",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "on",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "on",
+    "payloadType": "str",
+    "x": 710,
+    "y": 340,
+    "wires": [
+      [
+        "ca4cc6f6cdb0f7fd"
+      ]
+    ]
+  },
+  {
+    "id": "30bb6893135a1044",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "off",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "off",
+    "payloadType": "str",
+    "x": 710,
+    "y": 380,
+    "wires": [
+      [
+        "ca4cc6f6cdb0f7fd"
+      ]
+    ]
+  },
+  {
+    "id": "4fbc158c9f230794",
+    "type": "mqtt out",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "Display",
+    "topic": "miraie-ac/bedroom-ac/display/set",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "98deded7a87ca014",
+    "x": 260,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "06e79126e94fd87e",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "on",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "on",
+    "payloadType": "str",
+    "x": 130,
+    "y": 340,
+    "wires": [
+      [
+        "4fbc158c9f230794"
+      ]
+    ]
+  },
+  {
+    "id": "557aca6da9e07fa5",
+    "type": "inject",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "off",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "off",
+    "payloadType": "str",
+    "x": 130,
+    "y": 380,
+    "wires": [
+      [
+        "4fbc158c9f230794"
+      ]
+    ]
+  },
+  {
+    "id": "71fc28a12b37336a",
+    "type": "mqtt in",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "HA Stat",
+    "topic": "homeassistant/status",
+    "qos": "0",
+    "datatype": "auto",
+    "broker": "98deded7a87ca014",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 90,
+    "y": 60,
+    "wires": [
+      [
+        "3528548ac824fe10"
+      ]
+    ]
+  },
+  {
+    "id": "3528548ac824fe10",
+    "type": "ha-miraie-ac",
+    "z": "1030858c3d274909",
+    "g": "73ab60dae517aff2",
+    "name": "MirAIe",
+    "haBrokerHost": "192.168.1.118",
+    "haBrokerPort": "1883",
+    "useCleanSession": "true",
+    "publishDiscovery": "true",
+    "useSsl": "false",
+    "logLevel": "OFF",
+    "x": 170,
+    "y": 160,
+    "wires": [
+      [
+        "ee5cd1ebb0b558f0"
+      ]
+    ]
+  },
+  {
+    "id": "98deded7a87ca014",
+    "type": "mqtt-broker",
+    "name": "HA",
+    "broker": "192.168.1.111",
+    "port": "1883",
+    "clientid": "node-red",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "3",
+    "keepalive": "60",
+    "cleansession": false,
+    "birthTopic": "nodered/LWT",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "online",
+    "birthMsg": {},
+    "closeTopic": "nodered/LWT",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "down",
+    "closeMsg": {},
+    "willTopic": "nodered/LWT",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "offline",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  }
 ]
