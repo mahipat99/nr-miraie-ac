@@ -15,7 +15,11 @@ Once authenticated, the list of devices is pulled down exposed to HA using MQTT 
 * Add the node to a flow and configure
 * Search for "climate: entities on HA
 
-![image](https://user-images.githubusercontent.com/20719501/146172849-926ed410-3a45-4368-8311-1192b07d49fa.png)
+![image](https://i.imgur.com/SVRQTZC.png)
+
+## Flow
+
+![image](https://i.imgur.com/zcCmCaf.png)
 
 ---
 ## TODO
